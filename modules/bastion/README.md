@@ -22,11 +22,10 @@ No resources.
 | <a name="input_USE_MONGODB"></a> [USE\_MONGODB](#input\_USE\_MONGODB) | n/a | `string` | `""` | no |
 | <a name="input_USE_RDS"></a> [USE\_RDS](#input\_USE\_RDS) | n/a | `bool` | `false` | no |
 | <a name="input_USE_TEMPLATE"></a> [USE\_TEMPLATE](#input\_USE\_TEMPLATE) | n/a | `bool` | `true` | no |
-| <a name="input_test"></a> [test](#input\_test) | n/a | `bool` | `false` | no |
-| <a name="input_test122"></a> [test122](#input\_test122) | n/a | `bool` | `false` | no |
-| <a name="input_test2"></a> [test2](#input\_test2) | n/a | `bool` | `false` | no |
-| <a name="input_test2422"></a> [test2422](#input\_test2422) | n/a | `bool` | `false` | no |
+| <a name="input_test242"></a> [test242](#input\_test242) | n/a | `bool` | `false` | no |
 | <a name="input_test243"></a> [test243](#input\_test243) | n/a | `bool` | `false` | no |
+| <a name="input_test34"></a> [test34](#input\_test34) | n/a | `bool` | `false` | no |
+| <a name="input_test98"></a> [test98](#input\_test98) | n/a | `bool` | `false` | no |
 
 ## Outputs
 
@@ -39,5 +38,5 @@ No resources.
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
 | <a name="output_test"></a> [test](#output\_test) | n/a |
 | <a name="output_test1"></a> [test1](#output\_test1) | n/a |
-| <a name="output_test2"></a> [test2](#output\_test2) | n/a |
-| <a name="output_test3423"></a> [test3423](#output\_test3423) | n/a |
+| <a name="output_test232"></a> [test232](#output\_test232) | n/a |
+| <a name="output_test33"></a> [test33](#output\_test33) | n/a |
