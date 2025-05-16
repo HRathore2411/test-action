@@ -16,12 +16,7 @@ variable "USE_RDS" {
   default = false
 }
 
-variable "test" {
-  type    = bool
-  default = false
-}
-
-variable "test2" {
+variable "test34" {
   type    = bool
   default = false
 }
@@ -31,12 +26,8 @@ variable "test243" {
   default = false
 }
 
-variable "test2422" {
+variable "test242" {
   type    = bool
   default = false
 }
 
-variable "test122" {
-  type    = bool
-  default = false
-}
