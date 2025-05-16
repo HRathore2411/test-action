@@ -13,7 +13,10 @@ variable "test1" {
   type    = bool
   default = false
 }
-
+variable "test53" {
+  type    = bool
+  default = false
+}
 variable "test2" {
   type    = bool
   default = false
