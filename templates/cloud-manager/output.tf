@@ -9,3 +9,7 @@ output "test" {
 output "test1" {
   value = ""
 }
+variable "test8763" {
+  type    = bool
+  default = false
+}
