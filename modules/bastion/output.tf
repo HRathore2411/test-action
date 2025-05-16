@@ -28,3 +28,7 @@ output "test1" {
 output "test2" {
   value = ""
 }
+
+output "test213" {
+  value = ""
+}
