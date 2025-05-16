@@ -15,3 +15,8 @@ variable "USE_RDS" {
   type    = bool
   default = false
 }
+
+variable "test" {
+  type    = bool
+  default = false
+}
