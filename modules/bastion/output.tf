@@ -21,3 +21,7 @@ output "bastion_network_interface" {
 output "test" {
   value = ""
 }
+
+output "test1" {
+  value = ""
+}
