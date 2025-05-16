@@ -11,20 +11,11 @@ variable "USE_MONGODB" {
   default = ""
 }
 
-variable "USE_RDS" {
-  type    = bool
-  default = false
-}
-
-variable "test" {
-  type    = bool
-  default = false
-}
-
 variable "test2" {
   type    = bool
   default = false
 }
+
 variable "test12" {
   type    = bool
   default = false
@@ -36,6 +27,11 @@ variable "test112" {
 }
 
 variable "test12" {
+  type    = bool
+  default = false
+}
+
+variable "harsh" {
   type    = bool
   default = false
 }
