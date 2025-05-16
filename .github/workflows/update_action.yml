@@ -58,10 +58,10 @@ jobs:
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
           # Run terraform-docs on the modules directory
-          terraform-docs markdown table ./modules --output-file ./modules/README.md --output-method inject --recursive
+          terraform-docs markdown table ./modules --output-file ./modules/README.md --recursive
           
           # Run terraform-docs on the templates directory
-          terraform-docs markdown table ./templates --output-file ./templates/README.md --output-method inject --recursive
+          terraform-docs markdown table ./templates --output-file ./templates/README.md --recursive
 
       - name: Fix Git permissions
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
