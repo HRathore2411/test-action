@@ -25,18 +25,8 @@ variable "test2" {
   type    = bool
   default = false
 }
-variable "test12" {
-  type    = bool
-  default = false
-}
 
-variable "test112" {
-  type    = bool
-  default = false
-}
-
-
-variable "test1232" {
+variable "test122" {
   type    = bool
   default = false
 }
