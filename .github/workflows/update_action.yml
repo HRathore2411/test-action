@@ -1,4 +1,4 @@
-name: Update READMEs with terraform-docs on Merge
+name: Update README.md files with terraform-docs on Merge
 
 on:
   push:
@@ -28,7 +28,6 @@ jobs:
         run: |
           TICKET=$(git log -1 --pretty=%B | grep -oE 'NCP-[0-9]+' || echo "NCP-XXXX")
           echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
-
       - name: Get changed Terraform directories
         id: get_dirs
         shell: bash
@@ -37,49 +36,48 @@ jobs:
           CHANGED=$(git diff --name-only "$BEFORE_COMMIT" "${{ github.sha }}" \
             | grep -E '^(modules|templates)/.*\.tf$' \
             | xargs -n1 dirname \
-            | sort -u | uniq)
-
+            | sort -u)
           echo "Changed directories:"
           echo "$CHANGED"
-
-          if [[ -z "$CHANGED" ]]; then
+          if [ -z "$CHANGED" ]; then
             echo "no_changes=true" >> "$GITHUB_OUTPUT"
           else
             echo "$CHANGED" > changed_dirs.txt
             echo "no_changes=false" >> "$GITHUB_OUTPUT"
           fi
+      - name: Use terraform-docs to inject docs into existing README.md files for modules and templates
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
+        uses: terraform-docs/gh-actions@v1.4.1
+        with:
+          working-dir: .
+          recursive: true
+          recursive-path: modules
+          output-method: inject  # Only inject the documentation, don't create new files
+          git-push: false
 
-      - name: Install terraform-docs (locally, no sudo)
-        if: steps.get_dirs.outputs.no_changes == 'false'
-        run: |
-          curl -sLo terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.19.0/terraform-docs-v0.19.0-linux-amd64.tar.gz
-          tar -xzf terraform-docs.tar.gz
-          mkdir -p $HOME/.local/bin
-          mv terraform-docs $HOME/.local/bin/
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          terraform-docs --version
+      - name: Use terraform-docs to inject docs into existing README.md files for modules and templates
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
+        uses: terraform-docs/gh-actions@v1.4.1
+        with:
+          working-dir: .
+          recursive: true
+          recursive-path: templates
+          output-method: inject  # Only inject the documentation, don't create new files
+          git-push: false
 
-      - name: Run terraform-docs in each directory
-        if: steps.get_dirs.outputs.no_changes == 'false'
+      - name: Fix Git permissions
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
-          while read -r dir; do
-            if [[ -f "$dir/README.md" ]]; then
-              echo "Updating $dir/README.md"
-              terraform-docs markdown table "$dir" > "$dir/README.md"
-            else
-              echo "Skipping $dir — no README.md found"
-            fi
-          done < changed_dirs.txt
-
-      - name: Commit and push all updated README.md files
-        if: steps.get_dirs.outputs.no_changes == 'false'
+          sudo chown -R "$(whoami)":"$(whoami)" .git/
+      - name: Commit and push the updated README.md files
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
-          git config user.name "testing"
-          git config user.email "testing@users.noreply.github.com"
+          git config user.name "tester"
+          git config user.email "tester@users.noreply.github.com"
+          
+          # Add both README.md files (modules/README.md and templates/README.md)
+          git add modules/**/README.md templates/**/README.md
+          git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update README.md with terraform-docs" || echo "No changes to commit"
           BRANCH="${GITHUB_REF#refs/heads/}"
-          git pull origin "$BRANCH" --ff-only || true
-          git add modules/**/README.md templates/**/README.md || true
-          git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update all README.md with terraform-docs" || echo "No changes to commit"
+          git pull origin "$BRANCH"
           git push origin "$BRANCH"
-
-
