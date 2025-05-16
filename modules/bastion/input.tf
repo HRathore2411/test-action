@@ -26,6 +26,11 @@ variable "test2" {
   default = false
 }
 
+variable "test243" {
+  type    = bool
+  default = false
+}
+
 variable "test122" {
   type    = bool
   default = false
