@@ -62,8 +62,8 @@ jobs:
       - name: Commit all README.md updates (one commit)
         shell: bash
         run: |
-          git config user.name "Nuxeo Cloud Automation"
-          git config user.email "78548774+nuxeo-cloud-automation@users.noreply.github.com"
+          git config user.name "HRathore2411"
+          git config user.email "harsh.rathore@nenosystems.in"
           git add modules/**/README.md templates/**/README.md || true
           git diff --cached --quiet || git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update README.md files with terraform-docs"
 
