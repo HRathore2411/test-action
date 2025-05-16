@@ -1,3 +1,4 @@
 modules/bastion
-templates/account/hosting
+modules/dns
 templates/account/nxio
+templates/cloud-manager
