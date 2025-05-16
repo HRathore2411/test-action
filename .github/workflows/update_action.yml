@@ -53,16 +53,6 @@ jobs:
           output-method: inject
           recursive: true
           git-push: false
-
-      - name: Run terraform-docs on all modules and templates
-        uses: terraform-docs/gh-actions@v1.4.1
-        with:
-          working-dir: false
-          recursive: true
-          recursive-path: templates
-          output-file: README.md
-          output-method: inject
-          git-push: false
           
       - name: Fix Git permissions
         shell: bash
