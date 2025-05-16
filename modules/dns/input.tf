@@ -12,7 +12,7 @@ variable "test34" {
   default = false
 }
 
-variable "test8763" {
+variable "harsh" {
   type    = bool
   default = false
 }
