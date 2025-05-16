@@ -25,7 +25,8 @@ output "test" {
 output "test1" {
   value = ""
 }
-output "test2" {
+
+output "test232" {
   value = ""
 }
 
