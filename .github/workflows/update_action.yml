@@ -7,7 +7,7 @@ on:
     paths:
       - modules/**/*.tf
       - templates/**/*.tf
-      
+
 permissions:
   contents: write
 
@@ -28,6 +28,7 @@ jobs:
         run: |
           TICKET=$(git log -1 --pretty=%B | grep -oE 'NCP-[0-9]+' || echo "NCP-XXXX")
           echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
+
       - name: Get changed Terraform directories
         id: get_dirs
         shell: bash
@@ -36,47 +37,47 @@ jobs:
           CHANGED=$(git diff --name-only "$BEFORE_COMMIT" "${{ github.sha }}" \
             | grep -E '^(modules|templates)/.*\.tf$' \
             | xargs -n1 dirname \
-            | sort -u)
+            | sort -u | uniq)
+
           echo "Changed directories:"
           echo "$CHANGED"
-          if [ -z "$CHANGED" ]; then
+
+          if [[ -z "$CHANGED" ]]; then
             echo "no_changes=true" >> "$GITHUB_OUTPUT"
           else
             echo "$CHANGED" > changed_dirs.txt
             echo "no_changes=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Install terraform-docs
-        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
+
+      - name: Install terraform-docs (locally, no sudo)
+        if: steps.get_dirs.outputs.no_changes == 'false'
         run: |
-          wget https://github.com/terraform-docs/terraform-docs/releases/download/v0.19.0/terraform-docs-v0.19.0-linux-amd64.tar.gz
-          tar -xzf terraform-docs-v0.19.0-linux-amd64.tar.gz
-          sudo mv terraform-docs /usr/local/bin/
-          
-      - name: Check terraform-docs version
-        run: terraform-docs --version
+          curl -sLo terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.19.0/terraform-docs-v0.19.0-linux-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          mkdir -p $HOME/.local/bin
+          mv terraform-docs $HOME/.local/bin/
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          terraform-docs --version
 
       - name: Run terraform-docs in each directory
-        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
+        if: steps.get_dirs.outputs.no_changes == 'false'
         run: |
-          while read dir; do
-            if [ -f "$dir/README.md" ]; then
-               echo "Updating $dir/README.md"
-               terraform-docs markdown table "$dir" > "$dir/README.md"
+          while read -r dir; do
+            if [[ -f "$dir/README.md" ]]; then
+              echo "Updating $dir/README.md"
+              terraform-docs markdown table "$dir" > "$dir/README.md"
             else
-               echo "Skipping $dir — no README.md found"
+              echo "Skipping $dir — no README.md found"
             fi
           done < changed_dirs.txt
-      - name: Fix Git permissions
-        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
-        run: |
-          sudo chown -R "$(whoami)":"$(whoami)" .git/
+
       - name: Commit and push all updated README.md files
-        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
+        if: steps.get_dirs.outputs.no_changes == 'false'
         run: |
           git config user.name "testing"
           git config user.email "testing@users.noreply.github.com"
           git add modules/**/README.md templates/**/README.md || true
           git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update all README.md with terraform-docs" || echo "No changes to commit"
           BRANCH="${GITHUB_REF#refs/heads/}"
-          git pull origin "$BRANCH"
+          git pull origin "$BRANCH" --rebase
           git push origin "$BRANCH"
