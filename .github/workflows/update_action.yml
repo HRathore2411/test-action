@@ -48,15 +48,20 @@ jobs:
           TICKET=$(git log -1 --pretty=%B | grep -oE 'NCP-[0-9]+' || echo "NCP-XXXX")
           echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
 
-      - name: Run terraform-docs on all modules and templates
+      - name: Install terraform-docs
+        run: |
+          curl -sLo terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          sudo mv terraform-docs /usr/local/bin/
+
+      - name: Run terraform-docs on modules and templates directories
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
-        uses: terraform-docs/gh-actions@v1.4.1
-        with:
-          working-dir: .
-          output-file: README.md
-          output-method: inject
-          recursive: true
-          git-push: false
+        run: |
+          # Run terraform-docs on the modules directory
+          terraform-docs markdown table ./modules --output-file ./modules/README.md --output-method inject --recursive
+          
+          # Run terraform-docs on the templates directory
+          terraform-docs markdown table ./templates --output-file ./templates/README.md --output-method inject --recursive
 
       - name: Fix Git permissions
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
