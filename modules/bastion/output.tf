@@ -25,3 +25,6 @@ output "test" {
 output "test1" {
   value = ""
 }
+output "test2" {
+  value = ""
+}
