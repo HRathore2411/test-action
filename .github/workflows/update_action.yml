@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - templates/**/*.tf
-      - modules/**/*.tf
+      - module/**/*.tf
 
 jobs:
   update-readmes:
@@ -26,7 +26,7 @@ jobs:
         run: |
           BEFORE_COMMIT="${{ github.event.before || 'HEAD~1' }}"
           CHANGED=$(git diff --name-only "$BEFORE_COMMIT" "${{ github.sha }}" \
-            | grep -E '^(modules|templates)/.*\.tf$' \
+            | grep -E '^(module|templates)/.*\.tf$' \
             | xargs -n1 dirname \
             | sort -u)
           echo "Changed directories:"
