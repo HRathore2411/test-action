@@ -1,4 +1,3 @@
----
 name: Update READMEs with terraform-docs on Merge
 
 on:
@@ -6,15 +5,15 @@ on:
     branches:
       - main
     paths:
-      - templates/**/*.tf
       - modules/**/*.tf
-
+      - templates/**/*.tf
+      
 permissions:
   contents: write
 
 jobs:
   update-readmes:
-    name: Update README.md for modules and templates
+    name: Update README.md files with terraform-docs (single commit)
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +22,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Extract ticket ID from last commit
+        id: ticket
+        shell: bash
+        run: |
+          TICKET=$(git log -1 --pretty=%B | grep -oE 'NCP-[0-9]+' || echo "NCP-XXXX")
+          echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
       - name: Get changed Terraform directories
         id: get_dirs
         shell: bash
@@ -40,29 +45,28 @@ jobs:
             echo "$CHANGED" > changed_dirs.txt
             echo "no_changes=false" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Extract ticket ID from last commit
-        id: ticket
-        shell: bash
-        run: |
-          TICKET=$(git log -1 --pretty=%B | grep -oE 'NCP-[0-9]+' || echo "NCP-XXXX")
-          echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
-
       - name: Install terraform-docs
-        run: |
-          curl -sLo terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
-          tar -xzf terraform-docs.tar.gz
-          sudo mv terraform-docs /usr/local/bin/
-
-      - name: Run terraform-docs on modules and templates directories
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
-          # Run terraform-docs on the modules directory
-          terraform-docs markdown table ./modules --output-file ./modules/README.md --recursive
+          wget https://github.com/terraform-docs/terraform-docs/releases/download/v0.19.0/terraform-docs-v0.19.0-linux-amd64.tar.gz
+          tar -xzf terraform-docs-v0.19.0-linux-amd64.tar.gz
+          sudo mv terraform-docs /usr/local/bin/
           
-          # Run terraform-docs on the templates directory
-          terraform-docs markdown table ./templates --output-file ./templates/README.md --recursive
+      - name: Check terraform-docs version
+        run: terraform-docs --version
 
+      - name: Run terraform-docs in each directory
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
+        run: |
+          while read dir; do
+            if [ -f "$dir/README.md" ]; then
+               echo "Updating $dir/README.md"
+               terraform-docs markdown table "$dir" > "$dir/README.md"
+            else
+               echo "Skipping $dir — no README.md found"
+            fi
+          done < changed_dirs.txt
+          
       - name: Fix Git permissions
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
