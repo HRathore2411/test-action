@@ -14,3 +14,8 @@ variable "NUXEO_IMAGE_NAME" {
   type    = string
   default = ""
 }
+
+variable "test" {
+  type    = bool
+  default = false
+}

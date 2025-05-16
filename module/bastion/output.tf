@@ -17,3 +17,7 @@ output "security_group_id" {
 output "bastion_network_interface" {
   value = aws_network_interface.nuxeo.id
 }
+
+output "test" {
+  value = ""
+}
