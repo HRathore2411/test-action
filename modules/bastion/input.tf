@@ -31,3 +31,7 @@ variable "test242" {
   default = false
 }
 
+variable "test98" {
+  type    = bool
+  default = false
+}

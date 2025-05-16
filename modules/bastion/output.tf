@@ -30,6 +30,6 @@ output "test232" {
   value = ""
 }
 
-output "test3423" {
+output "test33" {
   value = ""
 }
