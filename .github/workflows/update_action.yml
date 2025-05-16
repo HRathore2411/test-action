@@ -1,4 +1,4 @@
-
+---
 name: Update READMEs with terraform-docs on Merge
 
 on:
@@ -8,6 +8,9 @@ on:
     paths:
       - templates/**/*.tf
       - modules/**/*.tf
+
+permissions:
+  contents: write
 
 jobs:
   update-readmes:
@@ -46,6 +49,7 @@ jobs:
           echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
 
       - name: Run terraform-docs on all modules and templates
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         uses: terraform-docs/gh-actions@v1.4.1
         with:
           working-dir: .
@@ -53,23 +57,22 @@ jobs:
           output-method: inject
           recursive: true
           git-push: false
-          
+
       - name: Fix Git permissions
-        shell: bash
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
           sudo chown -R "$(whoami)":"$(whoami)" .git/
 
-      - name: Commit all README.md updates (one commit)
-        shell: bash
+      - name: Commit and push the updated README.md files
+        if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
-          git config user.name "HRathore2411"
-          git config user.email "harsh.rathore@nenosystems.in"
-          git add modules/**/README.md templates/**/README.md || true
-          git diff --cached --quiet || git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update README.md files with terraform-docs"
+          git config user.name "tester"
+          git config user.email "tester@users.noreply.github.com"
 
-      - name: Push changes
-        shell: bash
-        run: |
+          git add modules/**/README.md templates/**/README.md
+
+          git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update README.md with terraform-docs" || echo "No changes to commit"
+
           BRANCH="${GITHUB_REF#refs/heads/}"
-          git pull --rebase origin "$BRANCH"
+          git pull origin "$BRANCH" --rebase
           git push origin "$BRANCH"
