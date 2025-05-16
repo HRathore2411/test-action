@@ -20,3 +20,8 @@ variable "test" {
   type    = bool
   default = false
 }
+
+variable "test1" {
+  type    = bool
+  default = false
+}
