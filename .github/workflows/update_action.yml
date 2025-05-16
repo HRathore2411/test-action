@@ -53,14 +53,16 @@ jobs:
           tar -xzf terraform-docs.tar.gz
           sudo mv terraform-docs /usr/local/bin/
 
-      - name: Run terraform-docs on modules and templates directories
+      - name: Run terraform-docs on all modules and templates subdirectories
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
         run: |
-          # Run terraform-docs on the modules directory
-          terraform-docs markdown table ./modules --output-file ./modules/README.md --recursive
-          
-          # Run terraform-docs on the templates directory
-          terraform-docs markdown table ./templates --output-file ./templates/README.md --recursive
+          for parent in modules templates; do
+            echo "Searching in $parent/"
+            for dir in $(find $parent -type f -name '*.tf' -exec dirname {} \; | sort -u); do
+              echo "Running terraform-docs in $dir"
+              terraform-docs markdown table "$dir" --output-file "$dir/README.md" --recursive
+            done
+          done
 
       - name: Fix Git permissions
         if: ${{ steps.get_dirs.outputs.no_changes == 'false' }}
