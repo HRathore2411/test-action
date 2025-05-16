@@ -75,7 +75,7 @@ jobs:
         run: |
           git config user.name "testing"
           git config user.email "testing@users.noreply.github.com"
-          git add modules/README.md templates/README.md
+          git add modules/**/README.md templates/**/README.md || true
           git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update all README.md with terraform-docs" || echo "No changes to commit"
           BRANCH="${GITHUB_REF#refs/heads/}"
           git pull origin "$BRANCH"
