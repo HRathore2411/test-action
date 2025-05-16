@@ -1,0 +1,85 @@
+
+name: Update READMEs with terraform-docs on Merge
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - templates/**/*.tf
+      - modules/**/*.tf
+
+jobs:
+  update-readmes:
+    name: Update README.md for modules and templates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get changed Terraform directories
+        id: get_dirs
+        shell: bash
+        run: |
+          BEFORE_COMMIT="${{ github.event.before || 'HEAD~1' }}"
+          CHANGED=$(git diff --name-only "$BEFORE_COMMIT" "${{ github.sha }}" \
+            | grep -E '^(modules|templates)/.*\.tf$' \
+            | xargs -n1 dirname \
+            | sort -u)
+          echo "Changed directories:"
+          echo "$CHANGED"
+          if [ -z "$CHANGED" ]; then
+            echo "no_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "$CHANGED" > changed_dirs.txt
+            echo "no_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract ticket ID from last commit
+        id: ticket
+        shell: bash
+        run: |
+          TICKET=$(git log -1 --pretty=%B | grep -oE 'NCP-[0-9]+' || echo "NCP-XXXX")
+          echo "ticket=$TICKET" >> "$GITHUB_OUTPUT"
+
+      - name: Run terraform-docs on all modules and templates
+        uses: terraform-docs/gh-actions@v1.4.1
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          recursive: true
+          git-push: false
+
+      - name: Run terraform-docs on all modules and templates
+        uses: terraform-docs/gh-actions@v1.4.1
+        with:
+          working-dir: false
+          recursive: true
+          recursive-path: templates
+          output-file: README.md
+          output-method: inject
+          git-push: false
+          
+      - name: Fix Git permissions
+        shell: bash
+        run: |
+          sudo chown -R "$(whoami)":"$(whoami)" .git/
+
+      - name: Commit all README.md updates (one commit)
+        shell: bash
+        run: |
+          git config user.name "Nuxeo Cloud Automation"
+          git config user.email "78548774+nuxeo-cloud-automation@users.noreply.github.com"
+          git add modules/**/README.md templates/**/README.md || true
+          git diff --cached --quiet || git commit -m "${{ steps.ticket.outputs.ticket }}: Auto-update README.md files with terraform-docs"
+
+      - name: Push changes
+        shell: bash
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          git pull --rebase origin "$BRANCH"
+          git push origin "$BRANCH"
