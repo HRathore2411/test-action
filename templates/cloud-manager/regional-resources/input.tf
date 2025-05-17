@@ -12,7 +12,7 @@ variable "ENVIRONMENT_TYPE" {
   default = "dev"
 }
 
-variable "NCO_VERSION" {
+variable "Harsh433" {
   type    = string
   default = "v11.0.4"
 }
