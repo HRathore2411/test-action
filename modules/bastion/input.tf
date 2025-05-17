@@ -16,6 +16,11 @@ variable "USE_RDS" {
   default = false
 }
 
+variable "dfgag" {
+  type    = bool
+  default = false
+}
+
 variable "Harsh433" {
   type    = bool
   default = false
