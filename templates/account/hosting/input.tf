@@ -20,6 +20,10 @@ variable "test" {
   default = false
 }
 
+variable "dfdsaf" {
+  type    = bool
+  default = false
+}
 variable "test765" {
   type    = bool
   default = false
