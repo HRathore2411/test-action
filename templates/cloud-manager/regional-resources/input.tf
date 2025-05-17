@@ -17,6 +17,10 @@ variable "Harsh433" {
   default = "v11.0.4"
 }
 
+variable "gadafs" {
+  type    = string
+  default = "v11.0.4"
+}
 variable "Harsh241" {
   type    = string
   default = "v11.0.4"
