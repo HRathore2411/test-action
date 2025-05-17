@@ -28,6 +28,7 @@ No resources.
 | <a name="input_USE_MONGODB"></a> [USE\_MONGODB](#input\_USE\_MONGODB) | n/a | `string` | `""` | no |
 | <a name="input_USE_RDS"></a> [USE\_RDS](#input\_USE\_RDS) | n/a | `bool` | `false` | no |
 | <a name="input_USE_TEMPLATE"></a> [USE\_TEMPLATE](#input\_USE\_TEMPLATE) | n/a | `bool` | `true` | no |
+| <a name="input_dfgag"></a> [dfgag](#input\_dfgag) | n/a | `bool` | `false` | no |
 | <a name="input_test242"></a> [test242](#input\_test242) | n/a | `bool` | `false` | no |
 | <a name="input_test243"></a> [test243](#input\_test243) | n/a | `bool` | `false` | no |
 | <a name="input_test34"></a> [test34](#input\_test34) | n/a | `bool` | `false` | no |

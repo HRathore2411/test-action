@@ -1,6 +1,4 @@
 modules/bastion
-modules/dns
 templates/account/hosting
 templates/account/nxio
-templates/cloud-manager
 templates/cloud-manager/regional-resources
