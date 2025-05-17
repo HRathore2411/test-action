@@ -16,7 +16,7 @@ variable "USE_RDS" {
   default = false
 }
 
-variable "USE_RDS12" {
+variable "Harsh433" {
   type    = bool
   default = false
 }
