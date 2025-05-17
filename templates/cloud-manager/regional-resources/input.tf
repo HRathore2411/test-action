@@ -17,7 +17,7 @@ variable "Harsh433" {
   default = "v11.0.4"
 }
 
-variable "gadafs" {
+variable "djfgeu" {
   type    = string
   default = "v11.0.4"
 }

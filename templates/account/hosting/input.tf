@@ -15,7 +15,7 @@ variable "NUXEO_IMAGE_NAME" {
   default = ""
 }
 
-variable "test" {
+variable "eskjfd" {
   type    = bool
   default = false
 }
