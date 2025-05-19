@@ -35,6 +35,10 @@ variable "test243" {
   default = false
 }
 
+variable "test098098" {
+  type    = bool
+  default = false
+}
 variable "dkfjas" {
   type    = bool
   default = false
