@@ -21,7 +21,7 @@ variable "djfgeu" {
   type    = string
   default = "v11.0.4"
 }
-variable "Harsh241" {
+variable "kjaheuh" {
   type    = string
   default = "v11.0.4"
 }
