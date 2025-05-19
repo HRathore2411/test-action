@@ -24,10 +24,10 @@ No resources.
 |------|-------------|------|---------|:--------:|
 | <a name="input_ADDITIONAL_TAGS"></a> [ADDITIONAL\_TAGS](#input\_ADDITIONAL\_TAGS) | n/a | `map(string)` | `{}` | no |
 | <a name="input_ENVIRONMENT_TYPE"></a> [ENVIRONMENT\_TYPE](#input\_ENVIRONMENT\_TYPE) | n/a | `string` | `"dev"` | no |
-| <a name="input_Harsh241"></a> [Harsh241](#input\_Harsh241) | n/a | `string` | `"v11.0.4"` | no |
 | <a name="input_Harsh433"></a> [Harsh433](#input\_Harsh433) | n/a | `string` | `"v11.0.4"` | no |
 | <a name="input_REGIONAL_VARIABLES"></a> [REGIONAL\_VARIABLES](#input\_REGIONAL\_VARIABLES) | n/a | `map(string)` | n/a | yes |
-| <a name="input_gadafs"></a> [gadafs](#input\_gadafs) | n/a | `string` | `"v11.0.4"` | no |
+| <a name="input_djfgeu"></a> [djfgeu](#input\_djfgeu) | n/a | `string` | `"v11.0.4"` | no |
+| <a name="input_kjaheuh"></a> [kjaheuh](#input\_kjaheuh) | n/a | `string` | `"v11.0.4"` | no |
 
 ## Outputs
 
