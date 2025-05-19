@@ -17,6 +17,10 @@ variable "dsfhklj" {
   default = false
 }
 
+variable "kjaesd9rj" {
+  type    = bool
+  default = false
+}
 variable "Harsh2445" {
   type    = bool
   default = false
