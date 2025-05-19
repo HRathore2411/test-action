@@ -1,1 +1,1 @@
-templates/cloud-manager/regional-resources
+modules/dns
